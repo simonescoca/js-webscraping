@@ -1,7 +1,6 @@
 const scrape = require("./scrape-function");
 const fs = require('fs');
 const brands = require("./brands");
-const { url } = require("inspector");
 
 const urls = [];
 
