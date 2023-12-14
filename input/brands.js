@@ -93,6 +93,15 @@ const brands = [
                     "https://www.automoto.it/listino/aston-martin/dbs/dbs-volante/166012"
                 ]
             },
+            {
+                name: "DBX",
+                urls: [
+                    "https://www.automoto.it/listino/aston-martin/dbx/dbx/154784",
+                    "https://www.automoto.it/listino/aston-martin/dbx/dbx707/167635",
+                    "https://www.automoto.it/listino/aston-martin/dbx/dbx707-amr23-edition/173891",
+                    "https://www.automoto.it/listino/aston-martin/dbx/dbx707-amr23-edition-with-q-highlights/173892"
+                ]
+            },
         ]
     },
 ];
