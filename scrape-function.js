@@ -45,7 +45,9 @@ async function scrape (url) {
         "potenza (termico + elettrico)",
         "coppia (termico + elettrico)",
         "massa rimorchiabile max",
-        "autonomia motore elettrico"
+        "autonomia motore elettrico",
+        "potenza massima",
+        "potenza di picco"
     ];
 
     for(const tableRow of tableRows) {
