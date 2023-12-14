@@ -1,5 +1,5 @@
 /node_modules
+/output
 .DS_Store
-cars-specs.json
-prova.js
+/utils/prova.js
 TODO.txt
