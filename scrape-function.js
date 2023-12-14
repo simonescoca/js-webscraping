@@ -9,6 +9,7 @@ async function scrape (url) {
     const tableRows = await page.$$('.datagrid > tbody > tr');
 
     const data = {};
+    data["url"] = url;
     const acceptableKeys = [
         "marca",
         "modello",
