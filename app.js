@@ -1,12 +1,14 @@
 const scrape = require("./scrape-function");
-const fs = require('fs');
+const fs = require("fs");
 const brands = require("./brands");
 
 const urls = [];
 
 brands.forEach((brand) => {
     brand.models.forEach((model) => {
-        urls.push(model.url);
+        model.urls.forEach((url) => {
+            urls.push(url);
+        })
     });
 });
 
@@ -20,29 +22,29 @@ const wait = setInterval(() => {
         let jsonData = [];
     
         try {
-            console.log('> leggo il file cars-specs.json...');
-            const fileData = fs.readFileSync('cars-specs.json', 'utf8');
+            console.log("> leggo il file cars-specs.json...");
+            const fileData = fs.readFileSync("cars-specs.json", "utf8");
             jsonData = JSON.parse(fileData);
         } catch (err) {
-            if (err.code !== 'ENOENT') {
-                console.log('Errore nella lettura del file:', err.message);
+            if (err.code !== "ENOENT") {
+                console.log("Errore nella lettura del file: " + err.message);
             } else {
-                console.log('> il file non esiste, creo il file...');
-                fs.writeFileSync('cars-specs.json', '[]', { flag: 'w' });
+                console.log("> il file non esiste, creo il file...");
+                fs.writeFileSync("cars-specs.json", "[]", { flag: "w" });
             }
         }
     
-        console.log('> aggiungo il nuovo oggetto con i dati al file cars-specs.json...');
+        console.log("> aggiungo il nuovo oggetto con i dati al file cars-specs.json...");
         jsonData.push(data);
-        fs.writeFileSync('cars-specs.json', JSON.stringify(jsonData, null, 2), { flag: 'w' });
+        fs.writeFileSync("cars-specs.json", JSON.stringify(jsonData, null, 2), { flag: "w" });
     })
     .then(() => {
         if(index === urlsFinalIndex) clearInterval(wait);
         index++;
     })
     .catch((err) => {
-        console.log('Errore: ' + err.message);
+        console.log("Errore: " + err.message);
     });
 
-}, 30000);
+}, 10000);
 
