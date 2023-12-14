@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const scrape = require("./scrape-function"); // importo la mia funzione di scrape che si serve di puppeteer
+const scrape = require("./scrape"); // importo la mia funzione di scrape che si serve di puppeteer
 
 /**
  * La funzione ricorsiva() fa partire la funzione scrape() una volta ogni tot, con tot casuale compreso tra 8 e 16 secondi,
@@ -8,8 +8,8 @@ const scrape = require("./scrape-function"); // importo la mia funzione di scrap
  * Inoltre la ricorsiva() si serve del modulo fs per leggere (se esiste) il cars-specs.json e vedere quali auto sono già state scaricate
  * per evitare di ripetere lo scrape.
  * Se il file cars-specs.json non dovesse esistere lo creerà e ci inserirà, sotto forma di oggetti, tutte quelle auto rappresentate da un URL in brands.js
- * @param {*} urls array contenente tutti gli URL brands.js, tranne gli URL delle auto già scaricate nel cars-specs.json
- * @param {*} startindex l'indice dal quale si comincia a scorrere gli URL dell'array parametro
+ * @param {Array} urls array contenente tutti gli URL brands.js, tranne gli URL delle auto già scaricate nel cars-specs.json
+ * @param {number} startindex l'indice dal quale si comincia a scorrere gli URL dell'array parametro
  */
 function ricorsiva(urls, startindex, finalindex) {
     
