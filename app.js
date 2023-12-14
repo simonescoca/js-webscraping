@@ -26,7 +26,7 @@ const wait = setInterval(() => {
         try {
             console.log("> leggo il file cars-specs.json...");
             const fileData = fs.readFileSync("cars-specs.json", "utf8"); // se esiste, leggo il cars-specs.json
-            jsonData = JSON.parse(fileData); // ! da rivedere
+            jsonData = JSON.parse(fileData); // convert JavaScript values to and from the JavaScript Object Notation (JSON) format
         } catch (err) {
             if (err.code !== "ENOENT") {
                 console.log("Errore nella lettura del file: " + err.message);
@@ -36,9 +36,16 @@ const wait = setInterval(() => {
             }
         }
     
-        console.log("> aggiungo il nuovo oggetto con i dati al file cars-specs.json...");
-        jsonData.push(data); // metto dentro all'array jsonData l'oggetto data che ritorna scrape()
-        fs.writeFileSync("cars-specs.json", JSON.stringify(jsonData, null, 2), { flag: "w" }); // aggiungo al cars-specs.json il nuovo oggetto
+        const existingCar = jsonData.find((car) => car.url === data.url); // leggendo il file cars-specs.json, verifico se l'auto che sto inserendo nel medesimo file già c'è
+
+        if (!existingCar) {
+            console.log(`> aggiungo ${data["Marca"]} ${data["Modello"]} ${data["Inizio produzione"]} al file cars-specs.json...`);
+
+            jsonData.push(data); // Se non c'è aggiungi il nuovo oggetto al file cars-specs.json
+            fs.writeFileSync("cars-specs.json", JSON.stringify(jsonData, null, 2), { flag: "w" }); // aggiungo al cars-specs.json il nuovo oggetto
+
+        } else console.log(`> ${data["Marca"]} ${data["Modello"]} ${data["Inizio produzione"]} non aggiunta a cars-specs.json, motivo: è già presente nel file.`);
+
     })
     .then(() => {
         if(startindex === urlsFinalIndex) clearInterval(wait); // quando finisce l'array di urls finisce anche l'esecuzione periodica di scrape()
