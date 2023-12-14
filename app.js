@@ -42,11 +42,11 @@ let startindex = 0;
 ricorsiva();
 
 /**
- * la funzione di scrape parte una volta ogni 10 secondi per evitare ban da parte del server del sito
+ * la funzione di scrape parte una volta ogni tot secondi per evitare ban da parte del server del sito
  */
 function ricorsiva() {
     
-    console.time('tempo-esecuzione'); // ti mostra quanto dura l'estrazione di una singola auto
+    console.time("scrape execution"); // ti mostra quanto dura l'estrazione di una singola auto
 
     scrape(urls[startindex])
     .then((data) => {
@@ -76,18 +76,19 @@ function ricorsiva() {
     .then(() => {
 
         // quando finisce l'array di urls finisce anche l'esecuzione periodica di scrape()
-        if(startindex != urlsFinalIndex) {
+        if(startindex !== urlsFinalIndex) {
 
             startindex++;
 
             setTimeout(() => {
 
-                console.timeEnd('tempo-esecuzione'); // ! Eeeeeeeee
+                console.timeEnd("scrape execution");
                 ricorsiva();
                 
             }, Math.round(Math.random() * 7000) + 8000);
 
         } else {
+            console.log("> scraping eseguito con successo!")
             return;
         }
     })
