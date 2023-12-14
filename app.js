@@ -1,17 +1,42 @@
 const scrape = require("./scrape-function"); // importo la mia funzione di scrape che si serve di puppeteer
-const fs = require("fs");
 const brands = require("./brands"); // importo il file di input degli URLs
+const fs = require("fs");
 
+/**
+ * da brands.js mi prendo tutti gli url e li pusho dentro urls[]
+ */
 const urls = [];
 brands.forEach((brand) => {
     brand.models.forEach((model) => {
         model.urls.forEach((url) => {
-            urls.push(url); // prendo tutti gli urls da brands.js e li pusho dentro urls[]
-        })
+            urls.push(url);
+        });
     });
 });
 
-const urlsFinalIndex = urls.length - 1; // prendo l'indice dell'ultimo elemento di urls
+
+/**
+ * leggo gli url di tutte le auto già presenti in cars-specs.json e li elimino da urls[] 
+ */
+let jsonData = [];
+try {
+
+    console.log("> leggo il file cars-specs.json...");
+    const fileData = fs.readFileSync("cars-specs.json", "utf8"); // se esiste, leggo il cars-specs.json
+    jsonData = JSON.parse(fileData); // convert JavaScript values to and from the JavaScript Object Notation (JSON) format
+
+    console.log("> elimino gli url delle auto già presenti in cars-specs.json dalla lista delle auto da scaricare...");
+
+    jsonData.forEach((car) => {
+        if(urls.includes(car.url)) urls.splice(urls.indexOf(car.url), 1);
+    });
+
+} catch (err) {
+    if (err.code !== "ENOENT") console.log("Errore nella lettura del file cars-specs.json: " + err.message);
+}
+
+
+const urlsFinalIndex = urls.length - 1; // prendo l'indice dell'ultimo elemento di urls[]
 let startindex = 0;
 
 /**
@@ -24,10 +49,12 @@ const wait = setInterval(() => {
         let jsonData = []; // creo un jsonData che è un array vuoto
     
         try {
-            console.log("> leggo il file cars-specs.json...");
+
             const fileData = fs.readFileSync("cars-specs.json", "utf8"); // se esiste, leggo il cars-specs.json
             jsonData = JSON.parse(fileData); // convert JavaScript values to and from the JavaScript Object Notation (JSON) format
+
         } catch (err) {
+
             if (err.code !== "ENOENT") {
                 console.log("Errore nella lettura del file: " + err.message);
             } else {
@@ -35,23 +62,20 @@ const wait = setInterval(() => {
                 fs.writeFileSync("cars-specs.json", "[]", { flag: "w" }); // se il file cars-specs.json non esiste, lo creo, con un array vuoto al suo interno
             }
         }
-    
-        const existingCar = jsonData.find((car) => car.url === data.url); // leggendo il file cars-specs.json, verifico se l'auto che sto inserendo nel medesimo file già c'è
 
-        if (!existingCar) {
-            console.log(`> aggiungo ${data["Marca"]} ${data["Modello"]} ${data["Inizio produzione"]} al file cars-specs.json...`);
+        console.log(`> aggiungo ${data["Marca"]} ${data["Modello"]} ${data["Inizio produzione"]} al file cars-specs.json...`);
 
-            jsonData.push(data); // Se non c'è aggiungi il nuovo oggetto al file cars-specs.json
-            fs.writeFileSync("cars-specs.json", JSON.stringify(jsonData, null, 2), { flag: "w" }); // aggiungo al cars-specs.json il nuovo oggetto
-
-        } else console.log(`> ${data["Marca"]} ${data["Modello"]} ${data["Inizio produzione"]} non aggiunta a cars-specs.json, motivo: è già presente nel file.`);
+        jsonData.push(data);
+        fs.writeFileSync("cars-specs.json", JSON.stringify(jsonData, null, 2), { flag: "w" }); // aggiungo al cars-specs.json il nuovo oggetto
 
     })
     .then(() => {
+
         if(startindex === urlsFinalIndex) clearInterval(wait); // quando finisce l'array di urls finisce anche l'esecuzione periodica di scrape()
         startindex++;
     })
     .catch((err) => {
+
         console.log("Errore: " + err.message);
     });
 
