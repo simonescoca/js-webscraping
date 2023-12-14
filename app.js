@@ -3,7 +3,6 @@ const fs = require("fs");
 const brands = require("./brands");
 
 const urls = [];
-
 brands.forEach((brand) => {
     brand.models.forEach((model) => {
         model.urls.forEach((url) => {
@@ -47,4 +46,3 @@ const wait = setInterval(() => {
     });
 
 }, 10000);
-
