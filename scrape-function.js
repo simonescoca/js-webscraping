@@ -1,5 +1,10 @@
 const puppeteer = require('puppeteer');
 
+/**
+ * La funzione serve a fare del webscraping mirato a tirare giù i dati tecnici delle automobili nel sito di automoto.it
+ * @param {string} url accetta un url qualsiasi del sito di automoto contenente una scheda tecnica di automobile 
+ * @returns {object} che contiene le key-value con i dati presi dalla tabella della scheda tecnica
+ */
 async function scrape (url) {
 
     const browser = await puppeteer.launch({headless: 'new'});
@@ -8,8 +13,12 @@ async function scrape (url) {
 
     const tableRows = await page.$$('.datagrid > tbody > tr');
 
-    const data = {};
-    data["url"] = url;
+    const data = {}; // inizializzo un oggetto "data" vuoto
+    data["url"] = url; // pusho in data l'url da dove provengono i dati
+
+    /**
+     * Definisco quali sono le key dei dati che voglio considerare
+     */
     const acceptableKeys = [
         "marca",
         "modello",
@@ -51,6 +60,11 @@ async function scrape (url) {
         "potenza di picco"
     ];
 
+    /**
+     * Per ogni tabella della pagina web dell'url fornito mi prendo il testo contenuto nei th, contenitori delle key e il testo dei td, contenitori dei values
+     * Uso la regex e trim() per pulire le stringhe in ingresso
+     * Eseguo un controllo sulle key e, se rientrano nelle accettabili, le pusho in data
+     */
     for(const tableRow of tableRows) {
         const th = await page.evaluate(element => element.querySelector('th').textContent, tableRow);
         const td = await page.evaluate(element => element.querySelector('td').textContent, tableRow);
