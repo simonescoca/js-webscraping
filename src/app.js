@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const brands = require("../input/brands"); // importo il file di input degli URLs
-const ricorsiva = require("./utils/functions/ricorsiva-function"); // importo la funzione ricorsiva
+const ricorsiva = require("./utils/functions/ricorsiva"); // importo la funzione ricorsiva
 
 /**
  * da brands.js mi prendo tutti gli url e li pusho dentro urls[]
