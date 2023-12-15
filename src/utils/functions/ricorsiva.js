@@ -42,7 +42,9 @@ function ricorsiva(urls, startindex, finalindex) {
     })
     .then(() => {
 
-        // quando finisce l'array di urls finisce anche l'esecuzione periodica di scrape()
+        /**
+         * quando finisce l'array di urls finisce anche l'esecuzione periodica di scrape()
+         */
         if(startindex !== finalindex) {
 
             setTimeout(() => {
