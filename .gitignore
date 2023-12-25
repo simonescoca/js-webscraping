@@ -1,6 +1,8 @@
 /node_modules
+/tmp
 /input
 /output
 .DS_Store
-/src/utils/prova.js
+prova.js
+example.js
 TODO.txt

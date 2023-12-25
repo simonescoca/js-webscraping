@@ -1,6 +1,6 @@
 const fs = require("fs");
-const path = require("path");
 const scrape = require("./scrape"); // importo la mia funzione di scrape che si serve di puppeteer
+const _dirproj = require("../utils/dirproj")
 
 /**
  * La funzione ricorsiva() fa partire la funzione scrape() una volta ogni tot, con tot casuale compreso tra 8 e 16 secondi,
@@ -21,8 +21,8 @@ function ricorsiva(urls, startindex, finalindex) {
     
         try {
     
-            const fileData = fs.readFileSync(path.join("./output", "cars-specs.json"), "utf8"); // se esiste, leggo il cars-specs.json
-            jsonData = JSON.parse(fileData); // convert JavaScript values to and from the JavaScript Object Notation (JSON) format
+            const inputJson = fs.readFileSync(`${_dirproj}/input/brands.json`, "utf-8"); // se esiste, leggo il cars-specs.json
+            jsonData = JSON.parse(inputJson); // convert JavaScript values to and from the JavaScript Object Notation (JSON) format
     
         } catch (err) {
     

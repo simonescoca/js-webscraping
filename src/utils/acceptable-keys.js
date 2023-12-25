@@ -1,0 +1,45 @@
+/**
+ * Definisco quali sono le key dei dati che voglio considerare durante lo scrape
+ */
+const acceptableKeys = [
+    "marca",
+    "modello",
+    "prezzo",
+    "inizio produzione",
+    "fine produzione",
+    "carrozzeria",
+    "porte",
+    "posti",
+    "bagagliaio",
+    "capacità serbatoio",
+    "massa in ordine di marcia",
+    "lunghezza",
+    "larghezza",
+    "altezza",
+    "passo",
+    "motore",
+    "cilindrata",
+    "alimentazione",
+    "potenza max/regime",
+    "coppia massima",
+    "trazione",
+    "cambio",
+    "marce",
+    "velocità max",
+    "accelerazione 0-100km/h",
+    "emissioni co2",
+    "omologazione antinquin.",
+    "urbano",
+    "extraurbano",
+    "misto",
+    "consumo combinato",
+    "tipo ibrido",
+    "potenza (termico + elettrico)",
+    "coppia (termico + elettrico)",
+    "massa rimorchiabile max",
+    "autonomia motore elettrico",
+    "potenza massima",
+    "potenza di picco"
+];
+
+module.exports = acceptableKeys;
