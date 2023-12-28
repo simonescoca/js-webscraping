@@ -3,11 +3,10 @@ const getInputInfo = require("../functions/getInputInfo");
 const cleanOutput = require("../functions/cleanOutput");
 const scrape = require("../functions/scrape");
 const readJson = require("../functions/readJson");
-const writeJson = require("../functions/writeJson");
 const getProcessTime = require("../functions/getProcessTime");
 const _dirproj = require("../utils/dirproj");
 
-console.time("> tempo processo: ");
+
 console.log("> controllo l'input...");
 if(checkInput()) {
     
@@ -23,15 +22,22 @@ if(checkInput()) {
         let processTime = getProcessTime(info.versions);
         processTime = `${processTime.days}d, ${processTime.hours}h, ${processTime.minutes}m`;
 
-        console.log(`> eseguo lo scrape di ${info.versions} elementi, tempo stimato: ${processTime} circa\n`);
-        scrape(brands, 0, (brands.length - 1), 0, (brands[0].models.length - 1), 0, (brands[0].models[0].versions.length - 1), 0)
-        .then((data) => {
-            writeJson(data, "cars");
-            console.timeEnd("> tempo processo: ");
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+        console.log(`> eseguo lo scrape di ${info.versions} elementi, tempo stimato: ${processTime} circa`);
+
+        const filename = "cars";
+        console.log(`\n> scrivo il file 'output/${filename}.json'`);
+
+        scrape(
+            brands,
+            0,
+            brands.length - 1,
+            0,
+            brands[0].models.length - 1,
+            0,
+            brands[0].models[0].versions.length - 1,
+            0,
+            filename
+        );
 
     } else console.log("> input non idoneo");
 

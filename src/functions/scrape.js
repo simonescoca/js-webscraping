@@ -1,13 +1,11 @@
 const puppeteer = require("puppeteer");
+const writeJson = require("./writeJson");
 const createDelay = require("./createDelay");
 const acceptableKeys = require("../utils/acceptable-keys");
 
-/**
- * La funzione serve a fare del webscraping mirato ad una serie di URL contenuti in un json che entra nell'input della funzione.
- * In particolare gli URL portano a pagine web del sito di automoto.it che contengono tabelle con i dati tecnici delle automobili
- */
-function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIndex, versionIndex, versionsFinalIndex, errCount, output = []) {
-    return new Promise((resolve) => {
+
+function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIndex, versionIndex, versionsFinalIndex, errCount, filename) {
+    return new Promise(() => {
         setTimeout(async() => {
 
             const browser = await puppeteer.launch({
@@ -25,11 +23,6 @@ function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIn
             
                 const data = {};
             
-                /**
-                 * Per ogni tabella della pagina web dell'url fornito mi prendo il testo contenuto nei th, contenitori delle key e il testo dei td, contenitori dei values
-                 * Uso la regex e trim() per pulire le stringhe in ingresso
-                 * Eseguo un controllo sulle key e, se rientrano nelle accettabili, le pusho in data
-                 */
                 for(const handler of tableRowsHandlers) {
                     const th = await page.evaluate(
                         element => element.querySelector("th").textContent,
@@ -48,7 +41,9 @@ function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIn
                 }
             
                 await browser.close();
-                output.push(data);
+
+                writeJson(data, filename);
+
 
                 if (brands[brandIndex].models[modelIndex].name.startsWith(brands[brandIndex].name)) {
                     console.log(` + ${brands[brandIndex].models[modelIndex].name} ${brands[brandIndex].models[modelIndex].versions[versionIndex].name}`);
@@ -67,14 +62,8 @@ function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIn
                         versionIndex + 1,
                         versionsFinalIndex,
                         errCount,
-                        output
-                    )
-                    .then(() => {
-                        resolve(output);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                        filename
+                    );
 
                 } else if(modelIndex < modelsFinalIndex) {
                     scrape(
@@ -86,14 +75,8 @@ function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIn
                         0,
                         brands[brandIndex].models[modelIndex + 1].versions.length - 1,
                         errCount,
-                        output
-                    )
-                    .then(() => {
-                        resolve(output);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                        filename
+                    );
 
                 } else if(brandIndex < brandsFinalIndex) {
                     scrape(
@@ -105,17 +88,8 @@ function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIn
                         0,
                         brands[brandIndex + 1].models[0].versions.length - 1,
                         errCount,
-                        output
-                    )
-                    .then(() => {
-                        resolve(output);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-
-                } else {
-                    resolve(output);
+                        filename
+                    );
                 }
 
             })
@@ -141,14 +115,8 @@ function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIn
                         versionIndex,
                         versionsFinalIndex,
                         errCount + 1,
-                        output
-                    )
-                    .then(() => {
-                        resolve(output);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                        filename
+                    );
 
                 } else if (err && errCount === 3) {
                     console.log(
@@ -168,14 +136,8 @@ function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIn
                             versionIndex + 1,
                             versionsFinalIndex,
                             0,
-                            output
-                        )
-                        .then(() => {
-                            resolve(output);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
+                            filename
+                        );
 
                     } else if(modelIndex < modelsFinalIndex) {
                         scrape(
@@ -187,14 +149,8 @@ function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIn
                             0,
                             brands[brandIndex].models[modelIndex + 1].versions.length - 1,
                             0,
-                            output
-                        )
-                        .then(() => {
-                            resolve(output);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
+                            filename
+                        );
 
                     } else if(brandIndex < brandsFinalIndex) {
                         scrape(
@@ -206,17 +162,8 @@ function scrape (brands, brandIndex, brandsFinalIndex, modelIndex, modelsFinalIn
                             0,
                             brands[brandIndex + 1].models[0].versions.length - 1,
                             0,
-                            output
-                        )
-                        .then(() => {
-                            resolve(output);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-
-                    } else {
-                        resolve(output);
+                            filename
+                        );
                     }
                 }
             });

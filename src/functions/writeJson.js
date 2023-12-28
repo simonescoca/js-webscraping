@@ -2,11 +2,11 @@ const fs = require("fs");
 const _dirproj = require("../utils/dirproj");
 
 function writeJson(data, filename) {
-    
     try {
-        fs.writeFileSync(_dirproj + `/output/${filename}.json`, JSON.stringify(data, null, 2), {flag: "a"});
-        console.log(`\n> scrivo il file 'output/${filename}.json'`);
-    
+        const jsonData = JSON.stringify(data, null, 4);
+        const formattedData = jsonData + ',\n';
+
+        fs.appendFileSync(`${_dirproj}/output/${filename}.json`, formattedData);
     } catch (err) {
         console.log("\n> errore nella scrittura del file", err);
     }
